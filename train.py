@@ -26,3 +26,6 @@ print("R2: ",r2_score(y_test,y_pred))
 
 with open("LR.pkl", 'wb') as f:
     pickle.dump(LR,f)
+
+with open("LE.pkl", 'wb') as f:
+    pickle.dump(le,f)

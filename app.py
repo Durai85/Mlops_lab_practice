@@ -7,6 +7,9 @@ app = Flask(__name__)
 with open("LR.pkl", "rb") as f:
     model = pickle.load(f)
 
+with open("LE.pkl", 'rb') as f:
+    le = pickle.load(f)
+
 @app.route("/")
 def home():
     return render_template("index.html")
@@ -21,8 +24,9 @@ def predict():
 
     # Predict directly
     pred = model.predict([[sepal_length, sepal_width, petal_length, petal_width]])
-    flower_name = pred[0]  # model already gives the name
+    pred_class = int(round(pred[0]))  # model already gives the name
 
+    flower_name = le.inverse_transform([pred_class])[0]
     return render_template("index.html", result=flower_name)
 
 if __name__ == "__main__":
