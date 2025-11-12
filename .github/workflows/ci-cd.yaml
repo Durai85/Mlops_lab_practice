@@ -3,24 +3,29 @@ name: Train and Build
 on: [push]
 
 jobs:
-    build:
-          runs-on: ubuntu-latest
+  build:
+    runs-on: ubuntu-latest
 
-          steps:
-              - uses: actions/checkout@v3
+    steps:
+      - uses: actions/checkout@v3
 
-              - uses: actions/setup-python@v4
-                with: 
-                    python-version: "3.9"
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"
 
-              - name: installing dependencies
-                run: |
-                  pip install -r requirements.txt
+      - name: Install dependencies
+        run: pip install -r requirements.txt
 
-              - name: Training Model
-                run: |
-                  python train.py
-              - name: Run Docker container
-                run: |
-                  docker run -p 5000:5000 model-ml
-                  echo "✅ Container running on port 5000"
+      - name: Train model
+        run: python train.py
+
+      - name: Build Docker image
+        run: docker build -t model-ml .
+
+      - name: List images (debug)
+        run: docker images
+
+      - name: Run Docker container
+        run: |
+          docker run -d -p 5000:5000 --name model_container model-ml
+          echo "✅ Container running successfully!"
