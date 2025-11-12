@@ -2,6 +2,7 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import LabelEncoder
+from sklearn.metrics import classification_report
 import pickle
 
 df = pd.read_csv('Iris.csv')
@@ -16,6 +17,10 @@ x_train, x_test, y_train, y_test = train_test_split(x,y,test_size=0.25,random_st
 LR = LinearRegression()
 
 LR.fit(x_train,y_train)
+
+y_pred = LR.predict(x_test)
+
+print(classification_report(y_test,y_pred))
 
 with open("LR.pkl", 'wb') as f:
     pickle.dump(LR,f)
